@@ -156,7 +156,10 @@ namespace InternshipApi.Controllers
             }
 
             var key = new SymmetricSecurityKey(
-                System.Text.Encoding.UTF8.GetBytes(config["JWT:skey"]));
+     System.Text.Encoding.UTF8.GetBytes(
+         config["Jwt:Key"] ?? throw new Exception("JWT Key is missing")
+     )
+ );
 
             var signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
