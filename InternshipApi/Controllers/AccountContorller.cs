@@ -119,11 +119,11 @@ namespace InternshipApi.Controllers
             var roles = await userManager.GetRolesAsync(user);
 
             var claims = new List<Claim>
-    {
-        new Claim(JwtRegisteredClaimNames.Email, user.Email),
-        new Claim(ClaimTypes.NameIdentifier, user.Id),
-        new Claim("FullName", user.FullName)
-    };
+                        {
+                            new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                            new Claim(ClaimTypes.NameIdentifier, user.Id),
+                            new Claim("FullName", user.FullName)
+                        };
 
             // نضيف كل Role كـ Claim، عشان [Authorize(Roles = "Student")] يشتغل صح
             foreach (var role in roles)
@@ -157,7 +157,7 @@ namespace InternshipApi.Controllers
 
             var key = new SymmetricSecurityKey(
      System.Text.Encoding.UTF8.GetBytes(
-         config["Jwt:Key"] ?? throw new Exception("JWT Key is missing")
+         config["Jwt:skey"] ?? throw new Exception("JWT Key is missing")
      )
  );
 
