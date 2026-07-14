@@ -33,7 +33,6 @@ namespace InternshipApi.Models
             [MaxLength(300)]
             public string? Location { get; set; }
 
-            [Column(TypeName = "nvarchar(50)")]
             public OpportunityStatus Status { get; set; } = OpportunityStatus.Open;
 
             public DateTime CreatedAt { get; set; } = DateTime.Now;
