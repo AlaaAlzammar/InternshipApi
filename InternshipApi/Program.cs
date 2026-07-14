@@ -47,7 +47,10 @@ namespace InternshipApi
                     ValidIssuer = builder.Configuration["JWT:iss"],
                     ValidAudience = builder.Configuration["JWT:aud"],
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(builder.Configuration["JWT:skey"]))
+    Encoding.UTF8.GetBytes(
+        builder.Configuration["JWT:skey"]
+        ?? throw new Exception("JWT:skey is missing")
+    ))
                 };
             });
             builder.Services.AddScoped<StudentsRepository>();
