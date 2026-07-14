@@ -47,16 +47,17 @@ namespace InternshipApi
                     ValidIssuer = builder.Configuration["JWT:iss"],
                     ValidAudience = builder.Configuration["JWT:aud"],
                     IssuerSigningKey = new SymmetricSecurityKey(
-    Encoding.UTF8.GetBytes(
-        builder.Configuration["JWT:skey"]
-        ?? throw new Exception("JWT:skey is missing")
-    ))
+                        Encoding.UTF8.GetBytes(
+                            builder.Configuration["JWT:skey"]
+                            ?? throw new Exception("JWT:skey is missing")
+                        ))
                 };
             });
+
             builder.Services.AddScoped<StudentsRepository>();
             builder.Services.AddScoped<TrainingInstitutionRepository>();
             builder.Services.AddScoped<TrainingOpportunityRepository>();
-            builder.Services.AddScoped <ApplicationRepository>();
+            builder.Services.AddScoped<ApplicationRepository>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -64,14 +65,23 @@ namespace InternshipApi
 
             var app = builder.Build();
 
+            // ============ Port binding for Render ============
+            var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+            app.Urls.Clear();
+            app.Urls.Add($"http://0.0.0.0:{port}");
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
-            app.UseHttpsRedirection();
+            else
+            {
+                // نخلي Swagger شغال في Production كمان مؤقتاً عشان تقدر تختبر بسهولة
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 
             app.UseAuthentication();   // لازم قبل Authorization
             app.UseAuthorization();
@@ -84,7 +94,7 @@ namespace InternshipApi
                 await RoleSeeder.SeedRolesAsync(roleManager);
             }
 
-            await app.RunAsync();   // بدل app.Run() العادية
+            await app.RunAsync();
         }
     }
 }
