@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InternshipApi.Controllers
 {
-    public class OpportunitiesController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class OpportunitiesController : ControllerBase
     {
         private readonly TrainingOpportunityRepository _repository;
 
