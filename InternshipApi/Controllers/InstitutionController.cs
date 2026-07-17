@@ -59,7 +59,7 @@ namespace InternshipApi.Controllers
                 Location = dto.Location,
                 InstitutionID = GetInstitutionId(),   // من التوكن، مش من الفرونت
                 Status = OpportunityStatus.Open,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.UtcNow
             };
 
             await _opportunityRepo.AddAsync(opportunity);
