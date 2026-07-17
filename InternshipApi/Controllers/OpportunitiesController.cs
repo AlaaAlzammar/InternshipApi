@@ -19,12 +19,9 @@ namespace InternshipApi.Controllers
         [HttpGet("search")]
         public async Task<ActionResult<IEnumerable<Opportunity>>> Search([FromQuery] string query)
         {
-            if (string.IsNullOrWhiteSpace(query))
-            {
-                return BadRequest("Query parameter is required.");
-            }
-
-            var results = await _repository.SearchAsync(query);
+            var results = string.IsNullOrWhiteSpace(query)
+                ? await _repository.GetAllAsync()
+                : await _repository.SearchAsync(query);
 
             return Ok(results);
         }
