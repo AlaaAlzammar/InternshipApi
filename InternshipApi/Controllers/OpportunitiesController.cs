@@ -28,7 +28,7 @@ namespace InternshipApi.Controllers
 
             if (!results.Any())
             {
-                return NotFound($"No opportunities found matching '{query}'.");
+                return Ok($"No opportunities found matching '{query}'.");
             }
 
             return Ok(results);
