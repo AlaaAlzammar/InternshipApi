@@ -48,6 +48,7 @@ namespace InternshipApi.Repositories
             return _dbContext.Applications
                 .Include(a => a.Student)
                 .Include(a => a.Opportunity)
+                 .ThenInclude(o => o.Institution)
                 .Where(a => a.Opportunity.InstitutionID == institutionId)
                 .AsNoTracking();
         }
