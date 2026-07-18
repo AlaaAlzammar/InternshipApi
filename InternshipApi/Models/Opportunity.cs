@@ -35,9 +35,9 @@ namespace InternshipApi.Models
 
             public OpportunityStatus Status { get; set; } = OpportunityStatus.Open;
 
-            public DateTime CreatedAt { get; set; } = DateTime.Now;
+            public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-            public ICollection<Application> Applications { get; set; } = new List<Application>();
+        public ICollection<Application> Applications { get; set; } = new List<Application>();
         public enum OpportunityStatus
         {
             Open = 1,
