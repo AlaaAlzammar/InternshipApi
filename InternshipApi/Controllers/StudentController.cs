@@ -151,28 +151,34 @@ namespace InternshipApi.Controllers
         [HttpPost("applications")]
         public async Task<IActionResult> Apply([FromBody] CreateApplicationDto dto)
         {
-            var student = await _repo.GetStudentByUserId(GetUserId());
-            if (student == null) return NotFound("Student profile not found");
-
-            // تحقق: هل قدم قبل كده على نفس الفرصة؟
-            var existing = _repo.GetAllApplicationByStudentId(student.StudentID)
-                .Where(a => a.OpportunityID == dto.OpportunityId);
-
-            if (existing.Any())
-                return BadRequest("You already applied to this opportunity");
-
-            var application = new Application
+            try
             {
-                StudentID = student.StudentID,
-                OpportunityID = dto.OpportunityId,
-                Notes = dto.Notes,
-                Status = ApplicationStatus.Submitted,
-                AppliedAt = DateTime.Now
-            };
+                var student = await _repo.GetStudentByUserId(GetUserId());
+                if (student == null) return NotFound("Student profile not found");
 
-            await _repo.AddApplication(application);
+                bool alreadyApplied = await _repo.GetAllApplicationByStudentId(student.StudentID)
+                    .AnyAsync(a => a.OpportunityID == dto.OpportunityId);
 
-            return Ok(application);
+                if (alreadyApplied)
+                    return BadRequest("You already applied to this opportunity");
+
+                var application = new Application
+                {
+                    StudentID = student.StudentID,
+                    OpportunityID = dto.OpportunityId,
+                    Notes = dto.Notes,
+                    Status = ApplicationStatus.Submitted,
+                    AppliedAt = DateTime.Now
+                };
+
+                await _repo.AddApplication(application);
+
+                return Ok(application);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message, inner = ex.InnerException?.Message });
+            }
         }
 
         // GET: api/student/applications
