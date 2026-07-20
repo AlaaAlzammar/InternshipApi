@@ -38,7 +38,7 @@ namespace InternshipApi.Services
 
             var FileName = Guid.NewGuid().ToString() + Path.GetExtension(upload.FileName);
 
-            var FilePath = Path.Combine(_environment.WebRootPath, basePath, subFolder, FileName);
+            var FilePath = Path.Combine(_environment.ContentRootPath, basePath, subFolder, FileName);
 
             using (var fileStream = System.IO.File.Create(FilePath))
             {

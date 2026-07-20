@@ -49,7 +49,7 @@ namespace InternshipApi.Services
 
 
 
-            var FilePath = Path.Combine(_environment.WebRootPath, basePath, subFolder, FileName);
+            var FilePath = Path.Combine(_environment.ContentRootPath, basePath, subFolder, FileName);
 
             using (var fileStream = System.IO.File.Create(FilePath))
             {
