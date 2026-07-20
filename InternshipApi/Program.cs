@@ -66,6 +66,7 @@ namespace InternshipApi
             builder.Services.AddScoped<ApplicationRepository>();
             builder.Services.AddScoped<UploadImageFile>();
             builder.Services.AddScoped<UploadDocxFile>();
+            builder.Services.AddScoped<CloudinaryService>();
 
             // ============ CORS ============
             builder.Services.AddCors(options =>

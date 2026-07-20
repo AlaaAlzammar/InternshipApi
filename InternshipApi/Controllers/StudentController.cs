@@ -18,17 +18,14 @@ namespace InternshipApi.Controllers
     public class StudentController : ControllerBase
     {
         private readonly StudentsRepository _repo;
-        private readonly UploadImageFile _imageUploader;
-        private readonly UploadDocxFile _docxUploader;
+        private readonly CloudinaryService _cloudinary;
         private readonly ApplicationRepository _applicationsRepo;
         private readonly TrainingOpportunityRepository _opprepo;
 
-        public StudentController(StudentsRepository repo, UploadImageFile imageUploader,
-            UploadDocxFile docxUploader, ApplicationRepository applicationsRepo, TrainingOpportunityRepository opprepo)
+        public StudentController(StudentsRepository repo, CloudinaryService cloudinary, ApplicationRepository applicationsRepo, TrainingOpportunityRepository opprepo)
         {
             _repo = repo;
-            _imageUploader = imageUploader;
-            _docxUploader = docxUploader;
+            _cloudinary = cloudinary;
             _applicationsRepo = applicationsRepo;
             _opprepo = opprepo;
         }
@@ -74,6 +71,7 @@ namespace InternshipApi.Controllers
         }
 
         // POST: api/student/profile/image
+        // POST: api/student/profile/image
         [HttpPost("profile/image")]
         public async Task<IActionResult> UploadProfileImage(IFormFile file)
         {
@@ -86,13 +84,14 @@ namespace InternshipApi.Controllers
             string imageUrl;
             try
             {
-                imageUrl = _imageUploader.UploadFile(file, "profiles");
+                imageUrl = await _cloudinary.UploadImageAsync(file, "profiles");
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            student.ProfileImagePath = imageUrl;
+
+            student.ProfileImagePath = imageUrl;   // دلوقتي بيتخزن رابط Cloudinary كامل
             await _repo.UpdateStudent(student);
 
             return Ok(new { student.ProfileImagePath });
@@ -114,13 +113,13 @@ namespace InternshipApi.Controllers
             string cvUrl;
             try
             {
-                cvUrl = _docxUploader.UploadFile(file, "cvs");
-
+                cvUrl = await _cloudinary.UploadRawFileAsync(file, "cvs");
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
+
             student.CVPath = cvUrl;
             await _repo.UpdateStudent(student);
 
