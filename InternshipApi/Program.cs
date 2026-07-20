@@ -3,6 +3,7 @@ using InternshipApi.Data.Seed;
 using InternshipApi.Models;
 using InternshipApi.Repositories;
 using InternshipApi.Repository;
+using InternshipApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -63,6 +64,8 @@ namespace InternshipApi
             builder.Services.AddScoped<TrainingInstitutionRepository>();
             builder.Services.AddScoped<TrainingOpportunityRepository>();
             builder.Services.AddScoped<ApplicationRepository>();
+            builder.Services.AddScoped<UploadImageFile>();
+            builder.Services.AddScoped<UploadDocxFile>();
 
             // ============ CORS ============
             builder.Services.AddCors(options =>
