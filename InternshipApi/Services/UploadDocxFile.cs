@@ -36,18 +36,20 @@ namespace InternshipApi.Services
 
             }
 
-            
+
 
             var FileName = Guid.NewGuid().ToString() + Path.GetExtension(upload.FileName);
 
             var folderPath = Path.Combine(_environment.ContentRootPath, "wwwroot", basePath, subFolder);
             Directory.CreateDirectory(folderPath);
 
+            // ✅ استخدم نفس الـ folderPath، متعملش Path.Combine جديد من الأول
+            var FilePath = Path.Combine(folderPath, FileName);
 
 
 
 
-            var FilePath = Path.Combine(_environment.ContentRootPath, basePath, subFolder, FileName);
+
 
             using (var fileStream = System.IO.File.Create(FilePath))
             {

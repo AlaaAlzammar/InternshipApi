@@ -39,11 +39,11 @@ namespace InternshipApi.Services
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(upload.FileName);
 
             var folderPath = Path.Combine(_environment.ContentRootPath, "wwwroot", basePath, subFolder);
-            Directory.CreateDirectory(folderPath);   // ← كانت ناقصة تماماً هنا
+            Directory.CreateDirectory(folderPath);
 
-            var filePath = Path.Combine(folderPath, fileName);
+            var FilePath = Path.Combine(folderPath, fileName);
 
-            using (var fileStream = System.IO.File.Create(filePath))
+            using (var fileStream = System.IO.File.Create(FilePath))
             {
                 upload.CopyTo(fileStream);
             }
