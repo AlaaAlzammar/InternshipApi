@@ -2,6 +2,7 @@
 
 using InternshipApi.Models;
 using InternshipApi.Repositories;
+using InternshipApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,14 +18,17 @@ namespace InternshipApi.Controllers
     public class StudentController : ControllerBase
     {
         private readonly StudentsRepository _repo;
-        private readonly IWebHostEnvironment _environment;
+        private readonly UploadImageFile _imageUploader;
+        private readonly UploadDocxFile _docxUploader;
         private readonly ApplicationRepository _applicationsRepo;
         private readonly TrainingOpportunityRepository _opprepo;
 
-        public StudentController(StudentsRepository repo, IWebHostEnvironment environment, ApplicationRepository applicationsRepo, TrainingOpportunityRepository opprepo)
+        public StudentController(StudentsRepository repo, UploadImageFile imageUploader,
+            UploadDocxFile docxUploader, ApplicationRepository applicationsRepo, TrainingOpportunityRepository opprepo)
         {
             _repo = repo;
-            _environment = environment;
+            _imageUploader = imageUploader;
+            _docxUploader = docxUploader;
             _applicationsRepo = applicationsRepo;
             _opprepo = opprepo;
         }
@@ -79,18 +83,16 @@ namespace InternshipApi.Controllers
             var student = await _repo.GetStudentByUserId(GetUserId());
             if (student == null) return NotFound("Student profile not found");
 
-            var folder = Path.Combine(_environment.WebRootPath, "uploads", "profiles");
-            Directory.CreateDirectory(folder);
-
-            var fileName = $"{Guid.NewGuid()}_{file.FileName}";
-            var filePath = Path.Combine(folder, fileName);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            string imageUrl;
+            try
             {
-                await file.CopyToAsync(stream);
+                imageUrl = _imageUploader.UploadFile(file, "profiles");
             }
-
-            student.ProfileImagePath = $"/uploads/profiles/{fileName}";
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            student.ProfileImagePath = imageUrl;
             await _repo.UpdateStudent(student);
 
             return Ok(new { student.ProfileImagePath });
@@ -109,18 +111,17 @@ namespace InternshipApi.Controllers
             var student = await _repo.GetStudentByUserId(GetUserId());
             if (student == null) return NotFound("Student profile not found");
 
-            var folder = Path.Combine(_environment.WebRootPath, "uploads", "cvs");
-            Directory.CreateDirectory(folder);
-
-            var fileName = $"{Guid.NewGuid()}_{file.FileName}";
-            var filePath = Path.Combine(folder, fileName);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            string cvUrl;
+            try
             {
-                await file.CopyToAsync(stream);
-            }
+                cvUrl = _docxUploader.UploadFile(file, "cvs");
 
-            student.CVPath = $"/uploads/cvs/{fileName}";
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            student.CVPath = cvUrl;
             await _repo.UpdateStudent(student);
 
             return Ok(new { student.CVPath });
