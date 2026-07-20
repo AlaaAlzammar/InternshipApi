@@ -36,17 +36,20 @@ namespace InternshipApi.Services
 
             // photo ===>> ({" Health.png "})
 
-            var FileName = Guid.NewGuid().ToString() + Path.GetExtension(upload.FileName);
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(upload.FileName);
 
-            var FilePath = Path.Combine(_environment.ContentRootPath, basePath, subFolder, FileName);
+            var folderPath = Path.Combine(_environment.ContentRootPath, "wwwroot", basePath, subFolder);
+            Directory.CreateDirectory(folderPath);   // ← كانت ناقصة تماماً هنا
 
-            using (var fileStream = System.IO.File.Create(FilePath))
+            var filePath = Path.Combine(folderPath, fileName);
+
+            using (var fileStream = System.IO.File.Create(filePath))
             {
                 upload.CopyTo(fileStream);
             }
 
 
-            fileUrl = $"/{basePath}/{subFolder}/{FileName}";
+            fileUrl = $"/{basePath}/{subFolder}/{fileName}";
 
             return fileUrl;
 

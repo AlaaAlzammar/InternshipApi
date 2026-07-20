@@ -40,12 +40,10 @@ namespace InternshipApi.Services
 
             var FileName = Guid.NewGuid().ToString() + Path.GetExtension(upload.FileName);
 
-            var folderPath = Path.Combine(
-                _environment.WebRootPath,
-                basePath,
-                subFolder);
-
+            var folderPath = Path.Combine(_environment.ContentRootPath, "wwwroot", basePath, subFolder);
             Directory.CreateDirectory(folderPath);
+
+
 
 
 
