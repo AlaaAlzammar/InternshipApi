@@ -75,7 +75,9 @@ namespace InternshipApi
                 {
                     policy.SetIsOriginAllowed(origin =>
                             origin.StartsWith("http://localhost:") ||
-                            origin == "https://your-frontend.onrender.com" // غيّرها بالدومين الحقيقي بتاعك
+                            origin == "https://internship-platform.netlify.app/" 
+                           
+                            // غيّرها بالدومين الحقيقي بتاعك
                           )
                           .AllowAnyMethod()
                           .AllowAnyHeader()
