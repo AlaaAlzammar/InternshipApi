@@ -69,15 +69,15 @@ namespace InternshipApi
             builder.Services.AddScoped<CloudinaryService>();
 
             // ============ CORS ============
+            // ============ CORS ============
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowFrontend", policy =>
                 {
                     policy.SetIsOriginAllowed(origin =>
                             origin.StartsWith("http://localhost:") ||
-                            origin == "https://internship-platform.netlify.app/" 
-                           
-                            // غيّرها بالدومين الحقيقي بتاعك
+                            origin == "https://internships-platform-zeta.vercel.app" ||
+                            origin == "https://internship-platform.netlify.app"
                           )
                           .AllowAnyMethod()
                           .AllowAnyHeader()
