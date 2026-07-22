@@ -54,21 +54,33 @@ namespace InternshipApi.Controllers
 
         // PUT: api/student/profile
         [HttpPut("profile")]
+     
         public async Task<IActionResult> UpdateProfile([FromBody] UpdateStudentDto dto)
         {
             var student = await _repo.GetStudentByUserId(GetUserId());
             if (student == null) return NotFound("Student profile not found");
 
             student.Name = dto.Name ?? student.Name;
+            student.Email = dto.Email ?? student.Email;
             student.Level = dto.Level ?? student.Level;
             student.PhoneNumber = dto.PhoneNumber ?? student.PhoneNumber;
+            student.Location = dto.Location ?? student.Location;
+            student.University = dto.University ?? student.University;
+            student.Major = dto.Major ?? student.Major;
             student.GPA = dto.GPA ?? student.GPA;
             student.Bio = dto.Bio ?? student.Bio;
+            student.LinkedinUrl = dto.LinkedinUrl ?? student.LinkedinUrl;
+            student.GithubUrl = dto.GithubUrl ?? student.GithubUrl;
+            student.PortfolioUrl = dto.PortfolioUrl ?? student.PortfolioUrl;
+
+            if (dto.Skills != null)
+                student.Skills = dto.Skills;
 
             await _repo.UpdateStudent(student);
 
             return Ok(student);
         }
+
 
         // POST: api/student/profile/image
         // POST: api/student/profile/image
