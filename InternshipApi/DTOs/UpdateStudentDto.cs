@@ -28,7 +28,7 @@ namespace InternshipApi.DTOs
         [MaxLength(150, ErrorMessage = "Major can't be more than 150 characters")]
         public string? Major { get; set; }
 
-        [Range(0, 4.0, ErrorMessage = "GPA must be between 0 and 4.0")]
+        [Range(0, 100.0, ErrorMessage = "GPA must be between 0 and 100")]
         public decimal? GPA { get; set; }
 
         [MaxLength(1000, ErrorMessage = "Bio can't be more than 1000 characters")]
