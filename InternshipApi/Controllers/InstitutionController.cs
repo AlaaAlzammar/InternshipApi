@@ -166,6 +166,9 @@ namespace InternshipApi.Controllers
             institution.Address = dto.Address ?? institution.Address;
             institution.PhoneNumber = dto.PhoneNumber ?? institution.PhoneNumber;
             institution.Email = dto.Email ?? institution.Email;
+            institution.Type = dto.Type ?? institution.Type;
+            institution.FoundedYear = dto.FoundedYear ?? institution.FoundedYear;
+            institution.Description = dto.Description ?? institution.Description;
 
             await _institutionRepo.UpdateAsync(institution);
 
